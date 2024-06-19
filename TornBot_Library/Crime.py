@@ -1,9 +1,5 @@
 
 
-
-from TornBot import TornBot
-
-
 class Crime:
 
     def __init__(self, tornBotInstance: "TornBot"):

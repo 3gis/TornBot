@@ -5,9 +5,12 @@ import json
 import random
 from BotModes import BotMode  # BotModes.py
 from Gym import Gym  # Gym.py
+from Crime import Crime # Crime.py
 import re
 import inspect
 import nodriver as uc
+
+
 
 class TornBot:
     def __init__(self):

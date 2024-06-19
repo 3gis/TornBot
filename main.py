@@ -1,12 +1,17 @@
-from TornBot import TornBot
+import time
+from BotModes import AutomationMode
+from TornBot_Automations.TornAutomation import TornAutomation
+from TornBot_Library.TornBot import TornBot
 import asyncio
 
 
 async def main():
-    tornBot = TornBot()
-    await tornBot.LaunchBrowser()
-    await tornBot._NavigateToSite("https://www.torn.com")
-    await tornBot.Login("hello","bon")
+    Automation = TornAutomation()
+    Automation.Start()
+    
+    Automation.TornBotMode = AutomationMode.BROWSING
+    time.sleep(60)
+    Automation.TornBotMode = AutomationMode.TRAINSTR
     print("done")
 
 asyncio.get_event_loop().run_until_complete(main())
