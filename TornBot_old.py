@@ -16,9 +16,14 @@ class TornBot:
         self.status = BotMode.STARTING
         self.pages = []
         self.GymInstance = self.GymClass(self)
+        self.CrimeInstance = self.CrimeClass(self)
         self.status = BotMode.IDLE
-    
+        
     class GymClass(Gym):
+        def __init__(self, tornBotInstance):
+            super().__init__(tornBotInstance)
+            
+    class CrimeClass(Crime):
         def __init__(self, tornBotInstance):
             super().__init__(tornBotInstance)
     
@@ -130,7 +135,7 @@ class TornBot:
         except:
             return False
         
-    async def ClickElement(self, elementSelector):
+    async def _ClickElement(self, elementSelector):
         element = await self._FindElement(elementSelector)
         
         try:
@@ -139,7 +144,7 @@ class TornBot:
             self._LogError(e)
             raise
         
-    async def InputElement(self, elementSelector, value):
+    async def _InputElement(self, elementSelector, value):
         element = await self._FindElement(elementSelector)
         try:
             await element.type(value)
@@ -169,16 +174,16 @@ class TornBot:
         loginSubmitButton ="//div[contains(@class,'popup')]/form[@name='login']//input[@type = 'submit' and @value = 'Login']"
         profileButton = "//div[@class='profile-image-wrapper']"
         
-        await self.ClickElement(loginButton)
-        await self.InputElement(usernameInput,username)
-        await self.InputElement(passwordInput,password)
-        await self.ClickElement(loginSubmitButton)
+        await self._ClickElement(loginButton)
+        await self._InputElement(usernameInput,username)
+        await self._InputElement(passwordInput,password)
+        await self._ClickElement(loginSubmitButton)
         await self._FindElement(profileButton)
         
     async def NavigateToHome(self):
         homeButton = "//a[@aria-label='Index page' and @class='logo-link']"
         generalInformationLabel = "//h5[@class='box-title' and text()='General Information']"
         
-        await self.ClickElement(homeButton)
+        await self._ClickElement(homeButton)
         await self._FindElement(generalInformationLabel)     
     #endregion

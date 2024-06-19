@@ -24,6 +24,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BotModes.py" />
+    <Compile Include="Crime.py" />
     <Compile Include="Gym.py" />
     <Compile Include="main.py" />
     <Compile Include="TornBot.py" />

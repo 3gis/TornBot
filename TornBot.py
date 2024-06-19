@@ -16,9 +16,15 @@ class TornBot:
         self.activePage = None
         self.pages = []
         self.GymInstance = self.GymClass(self)
+        self.CrimeInstance = self.CrimeClass(self)
         self.status = BotMode.IDLE
 
     class GymClass(Gym):
+        def __init__(self, tornBotInstance):
+            super().__init__(tornBotInstance)
+
+
+    class CrimeClass(Crime):
         def __init__(self, tornBotInstance):
             super().__init__(tornBotInstance)
 
@@ -41,6 +47,9 @@ class TornBot:
             print(f"Failed to Log error {e}")
             pass
 
+    # region Browser General Utility Actions
+
+
     async def LaunchBrowser(self):
         try:
             self.browser = await uc.start(browser_executable_path='C:\\Users\\Egidijus\\AppData\\Local\\ms-playwright\\chromium-1117\\chrome-win\\chrome.exe')
@@ -56,16 +65,16 @@ class TornBot:
             self._LogError(e)
             raise
 
-    async def NavigateToSite(self, url, newPage=False):
+    async def _NavigateToSite(self, url, newTab=False):
         try:
-                page = await self.browser.get(url, new_tab=newPage)
+                page = await self.browser.get(url, new_tab=newTab)
                 self.activePage = page
                 self.pages = self.browser.tabs
         except Exception as e:
             self._LogError(e)
             raise
 
-    async def SwitchPage(self, page):
+    async def _SwitchPage(self, page):
         try:
             if page not in self.pages:
                 raise Exception("Page does not exist in this browser instance")
@@ -76,17 +85,34 @@ class TornBot:
             self._LogError(e)
             raise
 
-    async def RefreshPage(self):
+    async def _RefreshPage(self):
         try:
             await self.page.reload()
         except Exception as e:
             self._LogError(e)
             raise
-
+    #endregion
+    #region Browser Automation Actions
+        
+    async def _ReadElement(self, elementSelector):
+        try:
+            element = await self._FindElement(elementSelector)
+            return element.text
+        except Exception as e:
+            self._LogError(e)
+            raise
+        
     async def _FindElement(self, elementSelector):
         try:
             element = await self.activePage.find(elementSelector, timeout=10)
             return element
+        except Exception as e:
+            self._LogError(e)
+            raise
+    async def _FindElements(self, elementSelector):
+        try:
+            elements = await self.activePage.find_all(elementSelector, timeout=10)
+            return elements
         except Exception as e:
             self._LogError(e)
             raise
@@ -98,15 +124,24 @@ class TornBot:
         except:
             return False
 
-    async def ClickElement(self, elementSelector):
+    async def _ClickElement(self, elementSelector):
         element = await self._FindElement(elementSelector)
         try:
             await element.click()
         except Exception as e:
             self._LogError(e)
             raise
-             
-    async def InputElement(self, elementSelector, value):
+        
+    async def _ClickRandomElement(self, elementSelector):
+        elements = await self._FindElements(elementSelector)
+        try:
+            randomElementIndex = int(random.uniform(0,elements.count()))
+            await elements[randomElementIndex].click()
+        except Exception as e:
+            self._LogError(e)
+            raise
+        
+    async def _InputElement(self, elementSelector, value):
         element = await self._FindElement(elementSelector)
         try:
             await element.clear_input()
@@ -115,11 +150,13 @@ class TornBot:
             self._LogError(e)
             raise
 
-    async def IsLoggedIn(self):
+    async def _IsLoggedIn(self):
         profileButton = "//div[@class='profile-image-wrapper']"
         loggedIn = await self._CheckElement(profileButton)
         return loggedIn
 
+    #endregion
+    
     async def Login(self, username, password):
         loginButton = "//button[contains(@class,'loginBtn') and span[text() = 'Login']]"
         usernameInput = "//div[contains(@class,'popup')]/form[@name='login']//input[@id = 'player']"
@@ -127,13 +164,13 @@ class TornBot:
         loginSubmitButton = "//div[contains(@class,'popup')]/form[@name='login']//input[@type = 'submit' and @value = 'Login']"
         profileButton = "//div[@class='profile-image-wrapper']"
 
-        await self.ClickElement(loginButton)
+        await self._ClickElement(loginButton)
         time.sleep(random.uniform(0.1,0.3))
-        await self.InputElement(usernameInput, username)
+        await self._InputElement(usernameInput, username)
         time.sleep(random.uniform(0.1,0.3))
-        await self.InputElement(passwordInput, password)
+        await self._InputElement(passwordInput, password)
         time.sleep(random.uniform(0.1,0.3))
-        await self.ClickElement(loginSubmitButton)
+        await self._ClickElement(loginSubmitButton)
         time.sleep(random.uniform(0.1,0.3))
         await self._FindElement(profileButton)
 
@@ -141,6 +178,18 @@ class TornBot:
         homeButton = "//a[@aria-label='Index page' and @class='logo-link']"
         generalInformationLabel = "//h5[@class='box-title' and text()='General Information']"
 
-        await self.ClickElement(homeButton)
+        await self._ClickElement(homeButton)
         time.sleep(random.uniform(0.1,0.3))
         await self._FindElement(generalInformationLabel)
+
+
+    async def GetStatus(self):
+        #Get Energy
+        #Get Nerve
+        #Get Happy
+        #Get Life
+        #Get Money
+        #Get Level - check upgradable
+        #Get Points
+        #Get Merits*
+        return

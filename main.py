@@ -5,7 +5,7 @@ import asyncio
 async def main():
     tornBot = TornBot()
     await tornBot.LaunchBrowser()
-    await tornBot.NavigateToSite("https://www.torn.com")
+    await tornBot._NavigateToSite("https://www.torn.com")
     await tornBot.Login("hello","bon")
     print("done")
 
