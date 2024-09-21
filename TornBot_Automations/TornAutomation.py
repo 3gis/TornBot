@@ -4,6 +4,7 @@ import random
 import time
 from BotModes import AutomationMode, BotMode
 from TornBot_Library.TornBot import TornBot
+import asyncio
 
 class TornAutomation:
     def __init__(self):
@@ -23,18 +24,18 @@ class TornAutomation:
                     if await self.TornBot._IsLoggedIn():
                         await self.TornBot.NavigateToHome()
                     while self.TornBotMode == AutomationMode.IDLE:
-                        time.sleep(10)
+                        await asyncio.sleep(10)
                 case AutomationMode.PAUSED:
                     self.TornBot.status = BotMode.PAUSED
                     while self.TornBotMode == AutomationMode.PAUSED:
-                        time.sleep(10)
+                        await asyncio.sleep(10)
                 case AutomationMode.BROWSING:
                     self.TornBot.status = BotMode.BROWSING
-                    websites = ["www.google.com","www.youtube.com","www.w3schools.com", "www.stackoverflow.com"]
+                    websites = ["https://www.google.com","https://www.youtube.com","https://www.w3schools.com", "https://www.stackoverflow.com"]
                     while self.TornBotMode == AutomationMode.BROWSING:
-                        self.TornBot._NavigateToSite(random.choice(websites))
+                        await self.TornBot._NavigateToSite(random.choice(websites))
                         for i in range(0,20):
-                            time.sleep(60)
+                            await asyncio.sleep(60)
                         
                 case AutomationMode.TRAINSTR:
                     await self.InitializeRobot()
@@ -88,12 +89,12 @@ class TornAutomation:
                 
     async def InitializeRobot(self, newTab = False):
             
-        await self.TornBot._NavigateToSite("www.Torn.com", newTab)
+        await self.TornBot._NavigateToSite("https://www.Torn.com", newTab)
         self.LoggedIn = await self.TornBot._IsLoggedIn()
         if self.LoggedIn:
             await self.TornBot.NavigateToHome()
         else:
-            await self.TornBot._NavigateToSite("www.Torn.com", newTab)
+            await self.TornBot._NavigateToSite("https://www.Torn.com", newTab)
             await self.TornBot.Login(self.Username, self.Password)
             self.LoggedIn = True
             await self.TornBot.NavigateToHome()

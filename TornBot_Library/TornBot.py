@@ -70,9 +70,9 @@ class TornBot:
 
     async def _NavigateToSite(self, url, newTab=False):
         try:
-                page = await self.browser.get(url, new_tab=newTab)
-                self.activePage = page
-                self.pages = self.browser.tabs
+            page = await self.browser.get(url = url, new_tab=newTab)
+            self.activePage = page
+            self.pages = self.browser.tabs
         except Exception as e:
             self._LogError(e)
             raise

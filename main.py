@@ -3,16 +3,22 @@ from BotModes import AutomationMode
 from TornBot_Automations.TornAutomation import TornAutomation
 from TornBot_Library.TornBot import TornBot
 import asyncio
+import threading
 
-
-async def main():
+def main():
     Automation = TornAutomation()
-    await asyncio.create_task(Automation.Start())
-    time.sleep(60)
+    thread = threading.Thread(target=asyncio.run, args=(Automation.Start(),))
+    thread.start()
+    print("Browser Started")
+    time.sleep(10)
     Automation.TornBotMode = AutomationMode.BROWSING
-    time.sleep(60)
+    print("Browsing mode activated")
+    while True:
+        time.sleep(0.5)
     Automation.TornBotMode = AutomationMode.TRAINSTR
+    print("Training Strength mode activated")
     print("done")
 
-asyncio.get_event_loop().run_until_complete(main())
+if __name__ == "__main__":
+    main()
 
