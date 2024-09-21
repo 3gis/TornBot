@@ -7,8 +7,8 @@ import asyncio
 
 async def main():
     Automation = TornAutomation()
-    Automation.Start()
-    
+    await asyncio.create_task(Automation.Start())
+    time.sleep(60)
     Automation.TornBotMode = AutomationMode.BROWSING
     time.sleep(60)
     Automation.TornBotMode = AutomationMode.TRAINSTR

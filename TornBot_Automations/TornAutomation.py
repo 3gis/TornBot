@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from msilib.schema import Upgrade
 import random
 import time
@@ -9,15 +10,18 @@ class TornAutomation:
         self.TornBot = TornBot()
         self.TornBotMode = AutomationMode.IDLE
         self.LoggedIn = False
-        self.TornBot.LaunchBrowser()
+        self.Username = ""
+        self.Password = ""
 
     async def Start(self):
+        if self.TornBot.activePage is None:
+            await self.TornBot.LaunchBrowser()
         while True:
             match self.TornBotMode:
                 case AutomationMode.IDLE:
                     self.TornBot.status = BotMode.IDLE
-                    if self.TornBot._IsLoggedIn:
-                        self.TornBot.NavigateToHome()
+                    if await self.TornBot._IsLoggedIn():
+                        await self.TornBot.NavigateToHome()
                     while self.TornBotMode == AutomationMode.IDLE:
                         time.sleep(10)
                 case AutomationMode.PAUSED:
@@ -83,13 +87,14 @@ class TornAutomation:
                     self.TornBotMode = AutomationMode.BROWSING
                 
     async def InitializeRobot(self, newTab = False):
-        await TornBot._NavigateToSite("www.Torn.com", newTab)
-        self.LoggedIn = await TornBot._IsLoggedIn()
+            
+        await self.TornBot._NavigateToSite("www.Torn.com", newTab)
+        self.LoggedIn = await self.TornBot._IsLoggedIn()
         if self.LoggedIn:
-            await TornBot.NavigateToHome()
+            await self.TornBot.NavigateToHome()
         else:
-            await TornBot._NavigateToSite("www.Torn.com", newTab)
-            await TornBot.Login(self.Username, self.Password)
+            await self.TornBot._NavigateToSite("www.Torn.com", newTab)
+            await self.TornBot.Login(self.Username, self.Password)
             self.LoggedIn = True
-            await TornBot.NavigateToHome()
+            await self.TornBot.NavigateToHome()
             

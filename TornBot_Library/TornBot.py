@@ -4,8 +4,8 @@ import requests
 import json
 import random
 from BotModes import BotMode  # BotModes.py
-from Gym import Gym  # Gym.py
-from Crime import Crime # Crime.py
+from TornBot_Library.Gym import Gym  # Gym.py
+from TornBot_Library.Crime import Crime # Crime.py
 import re
 import inspect
 import nodriver as uc
