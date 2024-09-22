@@ -9,7 +9,7 @@ class Gym:
         gymTitle = "//div[contains(@class,'content-title')]//h4[contains(text(),'Gym')]"
         
         await self.tornBot.ClickElement(gymButton)
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self.tornBot._FindElement(gymTitle)
     
     async def TrainStrength(self,amount = "200"):
@@ -18,9 +18,9 @@ class Gym:
         successfulTrainLabel = "//div[contains(@class,'messageWrapper')]//p[contains(text(),'You successfully completed')]"
         
         await self.tornBot.InputElement(strengthInput, str(amount))
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self.tornBot.ClickElement(trainButton)
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self.tornBot._FindElement(successfulTrainLabel)
         
     async def TrainDefense(self,amount = "200"):
@@ -29,9 +29,9 @@ class Gym:
         successfulTrainLabel = "//div[contains(@class,'messageWrapper')]//p[contains(text(),'You successfully completed')]"
         
         await self.tornBot.InputElement(defenseInput, str(amount))
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self.tornBot.ClickElement(trainButton)
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self.tornBot._FindElement(successfulTrainLabel)
         
     async def TrainSpeed(self,amount = "200"):
@@ -40,9 +40,9 @@ class Gym:
         successfulTrainLabel = "//div[contains(@class,'messageWrapper')]//p[contains(text(),'You successfully completed')]"
         
         await self.tornBot.InputElement(speedInput, str(amount))
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self.tornBot.ClickElement(trainButton)
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self.tornBot._FindElement(successfulTrainLabel)
         
     async def TrainDexterity(self,amount = "200"):
@@ -51,9 +51,9 @@ class Gym:
         successfulTrainLabel = "//div[contains(@class,'messageWrapper')]//p[contains(text(),'You successfully completed')]"
         
         await self.tornBot.InputElement(dexterityInput, str(amount))
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self.tornBot.ClickElement(trainButton)
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self.tornBot._FindElement(successfulTrainLabel)
 
     async def IsUpgradeable(self):
@@ -65,9 +65,9 @@ class Gym:
         buyMembershipButton = "//button[text() = 'BUY MEMBERSHIP']"
         
         await self.tornBot.ClickElement(newGymButton)
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self.tornBot.ClickElement(buyMembershipButton)
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         upgradeable = await self.IsUpgradeable()
         
         if upgradeable == True:

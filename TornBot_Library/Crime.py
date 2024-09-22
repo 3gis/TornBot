@@ -10,7 +10,7 @@ class Crime:
         crimesTitle = "//div[contains(@class,'crimes-app')]//h4[contains(text(),'Crimes')]"
         
         await self.tornBot._ClickElement(crimesButton)
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self.tornBot._FindElement(crimesTitle)
         
 
@@ -19,7 +19,7 @@ class Crime:
         categoryHeader = f"//div[contains(@class,'appHeader')]//h4[contains(text(),'{crimeCategory}')]"
         
         await self.tornBot._ClickElement(category)
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self.tornBot._FindElement(categoryHeader)
         
     async def FindLastCategory(self):

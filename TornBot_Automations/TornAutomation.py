@@ -4,16 +4,19 @@ import random
 import time
 from BotModes import AutomationMode, BotMode
 from TornBot_Library.TornBot import TornBot
+from Utilities import Utilities
 import asyncio
 
 class TornAutomation:
     def __init__(self):
-        self.TornBot = TornBot()
+        self.AppSettings = Utilities.LoadAppSettings("appsettings.json") #try-except
+        self.TornBot = TornBot(self.AppSettings["AppSettings"]["BrowserPath"])
         self.TornBotMode = AutomationMode.IDLE
         self.LoggedIn = False
         self.Username = ""
         self.Password = ""
 
+        
     async def Start(self):
         if self.TornBot.activePage is None:
             await self.TornBot.LaunchBrowser()
@@ -24,18 +27,18 @@ class TornAutomation:
                     if await self.TornBot._IsLoggedIn():
                         await self.TornBot.NavigateToHome()
                     while self.TornBotMode == AutomationMode.IDLE:
-                        await asyncio.sleep(10)
+                        await asyncio.sleep(self.AppSettings["AppSettings"]["Timers"]["ResponseTime"])
                 case AutomationMode.PAUSED:
                     self.TornBot.status = BotMode.PAUSED
                     while self.TornBotMode == AutomationMode.PAUSED:
-                        await asyncio.sleep(10)
+                        await asyncio.sleep(self.AppSettings["AppSettings"]["Timers"]["ResponseTime"])
                 case AutomationMode.BROWSING:
                     self.TornBot.status = BotMode.BROWSING
-                    websites = ["https://www.google.com","https://www.youtube.com","https://www.w3schools.com", "https://www.stackoverflow.com"]
+                    websites = self.AppSettings["AppSettings"]["Urls"]["IdleWebsites"]
                     while self.TornBotMode == AutomationMode.BROWSING:
                         await self.TornBot._NavigateToSite(random.choice(websites))
                         for i in range(0,20):
-                            await asyncio.sleep(60)
+                            await asyncio.sleep(self.AppSettings["AppSettings"]["Timers"]["SleepTime_Default"])
                         
                 case AutomationMode.TRAINSTR:
                     await self.InitializeRobot()
@@ -89,12 +92,12 @@ class TornAutomation:
                 
     async def InitializeRobot(self, newTab = False):
             
-        await self.TornBot._NavigateToSite("https://www.Torn.com", newTab)
+        await self.TornBot._NavigateToSite(self.AppSettings["AppSettings"]["Urls"]["MainWebsite"], newTab)
         self.LoggedIn = await self.TornBot._IsLoggedIn()
         if self.LoggedIn:
             await self.TornBot.NavigateToHome()
         else:
-            await self.TornBot._NavigateToSite("https://www.Torn.com", newTab)
+            await self.TornBot._NavigateToSite(self.AppSettings["AppSettings"]["Urls"]["MainWebsite"], newTab) #TODO: Is this needed?
             await self.TornBot.Login(self.Username, self.Password)
             self.LoggedIn = True
             await self.TornBot.NavigateToHome()

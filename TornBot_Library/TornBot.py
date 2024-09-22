@@ -13,7 +13,7 @@ import nodriver as uc
 
 
 class TornBot:
-    def __init__(self):
+    def __init__(self,browserPath : str):
         self.status = BotMode.STARTING
         self.browser = None
         self.activePage = None
@@ -21,6 +21,7 @@ class TornBot:
         self.GymInstance = self.GymClass(self)
         self.CrimeInstance = self.CrimeClass(self)
         self.status = BotMode.IDLE
+        self.browserPath = browserPath
 
     class GymClass(Gym):
         def __init__(self, tornBotInstance):
@@ -55,7 +56,7 @@ class TornBot:
 
     async def LaunchBrowser(self):
         try:
-            self.browser = await uc.start(browser_executable_path='C:\\Users\\Egidijus\\AppData\\Local\\ms-playwright\\chromium-1117\\chrome-win\\chrome.exe')
+            self.browser = await uc.start(browser_executable_path=self.browserPath)
             self.status = BotMode.RUNNING
         except Exception as e:
             self._LogError(e)
@@ -168,13 +169,13 @@ class TornBot:
         profileButton = "//div[@class='profile-image-wrapper']"
 
         await self._ClickElement(loginButton)
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self._InputElement(usernameInput, username)
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self._InputElement(passwordInput, password)
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self._ClickElement(loginSubmitButton)
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self._FindElement(profileButton)
 
     async def NavigateToHome(self):
@@ -182,7 +183,7 @@ class TornBot:
         generalInformationLabel = "//h5[@class='box-title' and text()='General Information']"
 
         await self._ClickElement(homeButton)
-        time.sleep(random.uniform(0.1,0.3))
+        asyncio.sleep(random.uniform(0.1,0.3))
         await self._FindElement(generalInformationLabel)
 
 
