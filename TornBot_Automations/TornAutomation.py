@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from msilib.schema import Upgrade
 import random
 import time
