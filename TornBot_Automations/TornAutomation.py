@@ -1,6 +1,4 @@
-from msilib.schema import Upgrade
 import random
-import time
 from BotModes import AutomationMode, BotMode
 from TornBot_Library.TornBot import TornBot
 from Utilities import Utilities
