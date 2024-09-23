@@ -7,11 +7,11 @@ import asyncio
 class TornAutomation:
     def __init__(self):
         self.AppSettings = Utilities.LoadAppSettings("appsettings.json") #try-except
-        self.TornBot = TornBot(self.AppSettings["AppSettings"]["BrowserPath"])
+        self.TornBot = TornBot(self.AppSettings["AppSettings"]["BrowserPath"],self.AppSettings["AppSettings"]["UserDataPath"])
         self.TornBotMode = AutomationMode.IDLE
         self.LoggedIn = False
-        self.Username = ""
-        self.Password = ""
+        self.Username = self.AppSettings["AppSettings"]["Username"]
+        self.Password = self.AppSettings["AppSettings"]["Password"]
 
         
     async def Start(self):

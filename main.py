@@ -10,14 +10,11 @@ def main():
     thread = threading.Thread(target=asyncio.run, args=(Automation.Start(),))
     thread.start()
     print("Browser Started")
-    time.sleep(10)
-    Automation.TornBotMode = AutomationMode.BROWSING
-    print("Browsing mode activated")
+    time.sleep(2)
     while True:
-        time.sleep(0.5)
-    Automation.TornBotMode = AutomationMode.TRAINSTR
-    print("Training Strength mode activated")
-    print("done")
+        Automation.TornBotMode = AutomationMode.TRAINSTR
+        print("Training Strength mode activated")
+        time.sleep(1800)
 
 if __name__ == "__main__":
     main()

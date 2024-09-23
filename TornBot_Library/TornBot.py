@@ -12,7 +12,7 @@ import nodriver as uc
 
 
 class TornBot:
-    def __init__(self,browserPath : str):
+    def __init__(self,browserPath : str, userDataPath : str):
         self.status = BotMode.STARTING
         self.browser = None
         self.activePage = None
@@ -21,6 +21,7 @@ class TornBot:
         self.CrimeInstance = self.CrimeClass(self)
         self.status = BotMode.IDLE
         self.browserPath = browserPath
+        self.userDataPath = userDataPath
 
     class GymClass(Gym):
         def __init__(self, tornBotInstance):
@@ -55,7 +56,7 @@ class TornBot:
 
     async def LaunchBrowser(self):
         try:
-            self.browser = await uc.start(browser_executable_path=self.browserPath)
+            self.browser = await uc.start(browser_executable_path=self.browserPath,user_data_dir=self.userDataPath)
             self.status = BotMode.RUNNING
         except Exception as e:
             self._LogError(e)
@@ -107,14 +108,14 @@ class TornBot:
         
     async def _FindElement(self, elementSelector):
         try:
-            element = await self.activePage.find(elementSelector, timeout=10)
+            element = await self.activePage.find(elementSelector, timeout=60)
             return element
         except Exception as e:
             self._LogError(e)
             raise
     async def _FindElements(self, elementSelector):
         try:
-            elements = await self.activePage.find_all(elementSelector, timeout=10)
+            elements = await self.activePage.find_all(elementSelector, timeout=60)
             return elements
         except Exception as e:
             self._LogError(e)
